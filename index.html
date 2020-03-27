@@ -1,15 +1,68 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gem puzzle</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-  
+  <div class="wrapper">
+    <main class="container">
+      <div class="container__controls controls">
+        <button class="controls__button">Размешать и начать</button>
+        <button class="controls__button">Стоп</button>
+        <button class="controls__button">Сохранить</button>
+        <button class="controls__button">Результаты</button>
+      </div>
+      <div class="container__stats stats">
+        <span class="stats__param">Ходов: </span>
+        <span class="stats__turns"></span>
+        <span class="stats__param">Время: </span>
+        <span class="stats__elapsed-time"></span>
+      </div>
+      <div class="container__game-field">
+        <ul class="game-field">
+          <li class="game-field__block">1</li>
+          <li class="game-field__block">2</li>
+          <li class="game-field__block">3</li>
+          <li class="game-field__block">4</li>
+          <li class="game-field__block">5</li>
+          <li class="game-field__block">6</li>
+          <li class="game-field__block">7</li>
+          <li class="game-field__block">8</li>
+          <li class="game-field__block">9</li>
+          <li class="game-field__block">10</li>
+          <li class="game-field__block">11</li>
+          <li class="game-field__block">12</li>
+          <li class="game-field__block">13</li>
+          <li class="game-field__block">14</li>
+          <li class="game-field__block">15</li>
+          <li class="game-field__block game-field__block_current"></li>
+        </ul>
+      </div>
+      <div class="container__field-sizes field-sizes">
+        <div class="field-sizes__current">
+          <span class="field-sizes__title">Размер поля: </span>
+          <span class="field-sizes__current-size"></span>
+        </div>
+        <div class="field-sizes__others">
+          <span class="field-sizes__title">Другие размеры: </span>
+          <ul class="field-sizes__anchors field-size-anchors">
+            <li class="field-size-anchors__item"><a>3x3</a></li>
+            <li class="field-size-anchors__item"><a>4x4</a></li>
+            <li class="field-size-anchors__item"><a>5x5</a></li>
+            <li class="field-size-anchors__item"><a>6x6</a></li>
+            <li class="field-size-anchors__item"><a>7x7</a></li>
+            <li class="field-size-anchors__item"><a>8x8</a></li>
+          </ul>
+        </div>
+      </div>
+    </main>
+  </div>
+
   <script src="script.js"></script>
 </body>
 
