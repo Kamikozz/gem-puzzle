@@ -1,0 +1,23 @@
+{
+  "name": "gem-puzzle",
+  "version": "1.0.0",
+  "description": "rsschool task gem puzzle",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kamikozz/gem-puzzle.git"
+  },
+  "keywords": [
+    "rsschool",
+    "gem-puzzle"
+  ],
+  "author": "Alexey Shevchenko <kamikozz@mail.ru>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Kamikozz/gem-puzzle/issues"
+  },
+  "homepage": "https://github.com/Kamikozz/gem-puzzle#readme"
+}

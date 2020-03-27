@@ -1,0 +1,9 @@
+# Unix-style newlines
+[*]
+end_of_line = lf
+
+# Indentation HTML, CSS, SASS, JS
+[*.{html,css,scss,js,json}]
+indent_style = space
+indent_size = 2
+charset = utf-8
