@@ -77,18 +77,22 @@ body {
 .game-field {
   display: flex;
   margin-bottom: 10px;
+  width: 90vw;
+  max-width: 600px;
+  height: 90vw;
+  max-height: 600px;
+  flex-direction: row;
   flex-wrap: wrap;
-  border: 1px solid black;
 }
 
 .game-field__block {
   display: flex;
-  width: 100%;
-  padding: 50px;
+  width: calc(25% - 0px);
+  height: calc(25% - 0px);
   font-size: 2.4rem;
   color: grey;
-  border: 1px solid black;
-  flex: 1 0 8%;
+  outline: 1px solid black;
+  outline-offset: -2px;
   justify-content: center;
   align-items: center;
   cursor: pointer;
