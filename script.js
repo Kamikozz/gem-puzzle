@@ -172,4 +172,54 @@ function initStructure() {
   document.body.append(root);
 }
 
+function isGameOver(element, gameFieldSize) {
+  const array = [...element.children];
+  if (gameFieldSize === 4) {
+    for (let i = 0; i < gameFieldSize ** 2 - 1; i += 1) {
+      if (array[i].innerText !== `${i + 1}`) {
+        return false;
+      }
+    }
+    return true;
+  }
+  return false;
+}
+
 initStructure();
+
+const gameField = document.getElementsByClassName('game-field')[0];
+console.log(gameField);
+
+gameField.addEventListener('click', (e) => {
+  if (e.target.tagName !== 'LI') return 0;
+  if (e.target.className.indexOf('game-field__block_current') !== -1) return 0;
+
+  // get indexes
+  const temp = e.target;
+  const whiteSpace = document.getElementsByClassName('game-field__block_current')[0];
+  const children = [...gameField.children];
+  let tempIndex = -1;
+  let whiteSpaceIndex = -1;
+  for (let i = 0; i < children.length; i += 1) {
+    if (children[i] === temp) {
+      tempIndex = i;
+    } else if (children[i] === whiteSpace) {
+      whiteSpaceIndex = i;
+    }
+  }
+  console.log(tempIndex, whiteSpaceIndex);
+
+  if (tempIndex === whiteSpaceIndex - 1
+    || tempIndex === whiteSpaceIndex + 1
+    || tempIndex === whiteSpaceIndex + 4
+    || tempIndex === whiteSpaceIndex - 4) {
+    [children[tempIndex], children[whiteSpaceIndex]] = [children[whiteSpaceIndex], children[tempIndex]];
+    gameField.append(...children);
+
+    if (isGameOver(gameField, 4)) {
+      alert('GAME OVER!');
+    }
+  } else {
+  }
+
+});
