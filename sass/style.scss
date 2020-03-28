@@ -118,8 +118,11 @@ body {
 }
 
 .game-field__block:active {
-  background-color: rgba(0, 0, 0, 0.4);
   color: white;
+
+  background-color: rgba(0, 0, 0, 0.4);
+
+  user-select: none;
 }
 
 .game-field__block_current {
