@@ -449,8 +449,6 @@ class GemPuzzle {
   }
 
   shuffle() {
-    // TODO: [...gemPuzzle.gameFieldElement.firstElementChild.children].forEach(val => {val.style.width ='25%'; val.style.height = '20%'});
-
     // TODO: рандомный алгоритм шафлинга
     const array = [];
 
@@ -473,18 +471,16 @@ class GemPuzzle {
       console.log(str);
     }
 
-    showSwag.call(this, array);
+    // showSwag.call(this, array);
 
     const N = 25; // EASY = 25, MEDIUM = 25 * 4, HARD = 25 * 4 * 5
 
     let counterN = N; //Math.floor(Math.random() * N + 1);
-    console.log('Random N: ', counterN); // 1, 2, 3
-
-    console.log('LOH');
+    // console.log('Random N: ', counterN); // 1, 2, 3
 
     // 1, 2
     while (counterN) {
-      showSwag.call(this, array);
+      // showSwag.call(this, array);
 
       const temp = [
         whitePos + 1,
@@ -492,26 +488,32 @@ class GemPuzzle {
         whitePos + this.gameFieldSize,
         whitePos - this.gameFieldSize,
       ].filter((newPos) => this.checkForBoundaries(newPos, whitePos));
-      // temp = temp.filter((newPos) => gemPuzzle.checkForBoundaries(newPos, whitePos));
-      console.log('Current moves:', temp.map((val) => val + 1));
-      // temp = temp.map(val => val + 1);
-      // console.log(temp);
+
+      // console.log('Current moves:', temp.map((val) => val + 1));
 
       const K = Math.floor(Math.random() * temp.length);
       [array[whitePos], array[temp[K]]] = [array[temp[K]], array[whitePos]];
-      console.log(`Go to ${temp[K] + 1}!`);
+      // console.log(`Go to ${temp[K] + 1}!`);
       whitePos = temp[K];
 
       counterN -= 1;
     }
 
-    showSwag.call(this, array);
+    // showSwag.call(this, array);
+    // console.log(array);
+    const stringArray = array.map((number) => String(number));
+    const collection = [...this.gameFieldElement.firstElementChild.children];
+    stringArray.forEach((currentPosition) => {
+      let [temp] = collection.filter((item) => item.innerText === currentPosition);
+      if (!temp) {
+        [temp] = collection.filter((item) => item.classList.contains('game-field__block_current'));
+      }
+      this.gameFieldElement.firstElementChild.append(temp);
+    });
   }
 }
 
 const gemPuzzle = new GemPuzzle();
 gemPuzzle.initPuzzle();
-// gemPuzzle.resize();
-console.log(gemPuzzle);
 
-// gemPuzzle.shuffle();
+console.log(gemPuzzle);
