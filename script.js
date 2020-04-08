@@ -213,10 +213,6 @@ class GemPuzzle {
   initTimer() {
     this.stopTimer();
 
-    this.elapsedTime = 0;
-    this.turns = 0;
-    this.isUpdateRender = true;
-
     if (this.isUpdateRender) {
       const [turns] = this.statsElement.getElementsByClassName('stats__turns');
       const [elapsedTime] = this.statsElement.getElementsByClassName('stats__elapsed-time');
@@ -248,6 +244,10 @@ class GemPuzzle {
   stopTimer() {
     // console.log(this);
     clearInterval(this.timerId);
+
+    this.elapsedTime = 0;
+    this.turns = 0;
+    this.isUpdateRender = true;
   }
 
   getData() {
@@ -277,10 +277,54 @@ class GemPuzzle {
       return 0;
     });
 
-    // TODO: перенести обработчик события перемещения сюда
-    // this.gameFieldElement.addEventListener('click', (e) => {
-    // 
-    //});
+    this.gameFieldElement.addEventListener('click', (e) => {
+      if (!this.isGameStart) return 0;
+
+      if (e.target.tagName !== 'LI') return 0;
+
+      const CURRENT_GAME_FIELD_BLOCK = 'game-field__block_current';
+      if (e.target.classList.contains(CURRENT_GAME_FIELD_BLOCK)) return 0;
+
+      // find indexes of clickedItem & emptyCellItem
+      const cell = e.target;
+      const [emptyCell] = document.getElementsByClassName(CURRENT_GAME_FIELD_BLOCK);
+      const parentNode = this.gameFieldElement.firstElementChild;
+      const children = [...parentNode.children];
+
+      let cellIdx = -1;
+      let emptyCellIdx = -1;
+      children.forEach((val, index) => {
+        if (val === cell) {
+          cellIdx = index;
+        } else if (val === emptyCell) {
+          emptyCellIdx = index;
+        }
+      });
+
+      if (this.checkForBoundaries(cellIdx, emptyCellIdx)) {
+        [children[cellIdx], children[emptyCellIdx]] = [children[emptyCellIdx], children[cellIdx]];
+        parentNode.append(...children);
+
+        this.turns += 1;
+        this.isUpdateRender = true;
+
+        if (this.isUpdateRender) {
+          const [turns] = this.statsElement.getElementsByClassName('stats__turns');
+          turns.textContent = this.turns;
+
+          this.isUpdateRender = false;
+        }
+
+        if (this.isGameOver()) {
+          // TODO: stopTheGame()
+          this.endGame();
+          alert(`Ура! Вы решили головоломку за ${this.getParsedTime()} и ${this.turns} ходов`);
+        }
+      } else {
+        //
+      }
+      return 0;
+    });
   }
 
   newGame() {
@@ -366,114 +410,71 @@ class GemPuzzle {
 
     return false;
   }
+
+  shuffle() {
+    // TODO: [...gemPuzzle.gameFieldElement.firstElementChild.children].forEach(val => {val.style.width ='25%'; val.style.height = '20%'});
+
+    // TODO: рандомный алгоритм шафлинга
+    const array = [];
+
+    for (let i = 0; i < this.gameFieldSize ** 2 - 1; i += 1) {
+      array.push(i + 1);
+    }
+
+    array.push('<X>');
+
+    let whitePos = this.gameFieldSize ** 2 - 1;
+
+    function showSwag(arr) {
+      let str = '';
+      for (let i = 0; i < arr.length; i += 1) {
+        str += `${arr[i]}\t`;
+        if (i % this.gameFieldSize === this.gameFieldSize - 1) {
+          str += '\n';
+        }
+      }
+      console.log(str);
+    }
+
+    showSwag.call(this, array);
+
+    const N = 25; // EASY = 25, MEDIUM = 25 * 4, HARD = 25 * 4 * 5
+
+    let counterN = N; //Math.floor(Math.random() * N + 1);
+    console.log('Random N: ', counterN); // 1, 2, 3
+
+    console.log('LOH');
+
+    // 1, 2
+    while (counterN) {
+      showSwag.call(this, array);
+
+      const temp = [
+        whitePos + 1,
+        whitePos - 1,
+        whitePos + this.gameFieldSize,
+        whitePos - this.gameFieldSize,
+      ].filter((newPos) => this.checkForBoundaries(newPos, whitePos));
+      // temp = temp.filter((newPos) => gemPuzzle.checkForBoundaries(newPos, whitePos));
+      console.log('Current moves:', temp.map((val) => val + 1));
+      // temp = temp.map(val => val + 1);
+      // console.log(temp);
+
+      const K = Math.floor(Math.random() * temp.length);
+      [array[whitePos], array[temp[K]]] = [array[temp[K]], array[whitePos]];
+      console.log(`Go to ${temp[K] + 1}!`);
+      whitePos = temp[K];
+
+      counterN -= 1;
+    }
+
+    showSwag.call(this, array);
+  }
 }
 
 const gemPuzzle = new GemPuzzle();
 gemPuzzle.initPuzzle();
-gemPuzzle.resize();
+// gemPuzzle.resize();
 console.log(gemPuzzle);
 
-gemPuzzle.gameFieldElement.addEventListener('click', (e) => {
-  if (!gemPuzzle.isGameStart) return 0;
-
-  if (e.target.tagName !== 'LI') return 0;
-
-  const CURRENT_GAME_FIELD_BLOCK = 'game-field__block_current';
-  if (e.target.classList.contains(CURRENT_GAME_FIELD_BLOCK)) return 0;
-
-  // find indexes of clickedItem & emptyCellItem
-  const cell = e.target;
-  const [emptyCell] = document.getElementsByClassName(CURRENT_GAME_FIELD_BLOCK);
-  const parentNode = gemPuzzle.gameFieldElement.firstElementChild;
-  const children = [...parentNode.children];
-
-  let cellIdx = -1;
-  let emptyCellIdx = -1;
-  children.forEach((val, index) => {
-    if (val === cell) {
-      cellIdx = index;
-    } else if (val === emptyCell) {
-      emptyCellIdx = index;
-    }
-  });
-
-  if (gemPuzzle.checkForBoundaries(cellIdx, emptyCellIdx)) {
-    [children[cellIdx], children[emptyCellIdx]] = [children[emptyCellIdx], children[cellIdx]];
-    parentNode.append(...children);
-
-    gemPuzzle.turns += 1;
-    gemPuzzle.isUpdateRender = true;
-
-    if (gemPuzzle.isUpdateRender) {
-      const [turns] = gemPuzzle.statsElement.getElementsByClassName('stats__turns');
-      turns.textContent = gemPuzzle.turns;
-
-      gemPuzzle.isUpdateRender = false;
-    }
-
-    if (gemPuzzle.isGameOver()) {
-      // TODO: stopTheGame()
-      alert(`Ура! Вы решили головоломку за ${gemPuzzle.getParsedTime()} и ${gemPuzzle.turns} ходов`);
-    }
-  } else {
-    //
-  }
-  return 0;
-});
-
-// TODO: [...gemPuzzle.gameFieldElement.firstElementChild.children].forEach(val => {val.style.width ='25%'; val.style.height = '20%'});
-
-// TODO: рандомный алгоритм шафлинга
-let arr = [];
-gemPuzzle.gameFieldSize = 4;
-for (let i = 0; i < gemPuzzle.gameFieldSize ** 2 - 1; i += 1) {
-  arr.push(i + 1);
-}
-
-arr.push('<X>');
-
-let whitePos = 15;
-
-function showSwag(arr) {
-  let str = '';
-  for (let i = 0; i < arr.length; i += 1) {
-    str += `${arr[i]}\t`;
-    if (i % gemPuzzle.gameFieldSize === gemPuzzle.gameFieldSize - 1) {
-      str += '\n';
-    }
-  }
-  console.log(str);
-}
-
-showSwag(arr);
-
-let N = 25; // EASY = 25, MEDIUM = 25 * 4, HARD = 25 * 4 * 5
-
-let randomN = N; //Math.floor(Math.random() * N + 1);
-console.log('Random N: ', randomN); // 1, 2, 3
-
-console.log('LOH');
-// 1, 2
-while (randomN) {
-  showSwag(arr);
-
-  const temp = [
-    whitePos + 1,
-    whitePos - 1,
-    whitePos + gemPuzzle.gameFieldSize,
-    whitePos - gemPuzzle.gameFieldSize,
-  ].filter((newPos) => gemPuzzle.checkForBoundaries(newPos, whitePos));
-  // temp = temp.filter((newPos) => gemPuzzle.checkForBoundaries(newPos, whitePos));
-  console.log('Current moves:', temp.map(val => val + 1));
-  // temp = temp.map(val => val + 1);
-  // console.log(temp);
-
-  const K = Math.floor(Math.random() * temp.length);
-  [arr[whitePos], arr[temp[K]]] = [arr[temp[K]], arr[whitePos]];
-  console.log(`Go to ${temp[K] + 1}!`);
-  whitePos = temp[K];
-
-  randomN -= 1;
-}
-
-showSwag(arr);
+gemPuzzle.shuffle();
