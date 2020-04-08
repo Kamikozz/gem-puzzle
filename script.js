@@ -330,6 +330,19 @@ class GemPuzzle {
   newGame() {
     console.log('New game');
     this.isGameStart = true;
+
+    // Reset game field
+    const collection = [...this.gameFieldElement.firstElementChild.children];
+    for (let i = 0; i < this.gameFieldSize ** 2 - 1; i += 1) {
+      const [temp] = collection.filter((item) => item.innerText === `${i + 1}`);
+      this.gameFieldElement.firstElementChild.append(temp);
+    }
+    const [temp] = collection.filter((item) => item.classList.contains('game-field__block_current'));
+    this.gameFieldElement.firstElementChild.append(temp);
+
+    // Shuffle
+    this.shuffle();
+
     this.initTimer();
   }
 
