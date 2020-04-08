@@ -44,7 +44,7 @@ body {
 
   color: white;
 
-  background-color: magenta;
+  background-color: $button-color;
 
   border-radius: 5px;
 
@@ -189,4 +189,16 @@ body {
 .field-size-anchors__item {
   display: inline;
   margin-right: 5px;
+
+  color: $button-color;
+
+  background-color: white;
+
+  cursor: pointer;
+}
+
+.field-size-anchors__item:hover {
+  background-color: darken(white, 10%);
+
+  user-select: none;
 }

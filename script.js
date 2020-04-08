@@ -242,12 +242,15 @@ class GemPuzzle {
   }
 
   stopTimer() {
-    // console.log(this);
     clearInterval(this.timerId);
 
+    this.reset(true);
+  }
+
+  reset(isUpdate = false) {
     this.elapsedTime = 0;
     this.turns = 0;
-    this.isUpdateRender = true;
+    this.isUpdateRender = isUpdate;
   }
 
   getData() {
@@ -317,13 +320,35 @@ class GemPuzzle {
 
         if (this.isGameOver()) {
           // TODO: stopTheGame()
-          this.endGame();
           alert(`Ура! Вы решили головоломку за ${this.getParsedTime()} и ${this.turns} ходов`);
+          this.endGame();
         }
       } else {
         //
       }
       return 0;
+    });
+
+    this.otherFieldSizesElement.addEventListener('click', (e) => {
+      if (e.target.tagName !== 'A') return;
+
+      const fieldSize = e.target.innerText;
+
+      this.gameFieldSize = Number(fieldSize[0]); // get first char of '3x3'
+      this.resize();
+
+      this.endGame();
+
+      if (this.isUpdateRender) {
+        const [turns] = this.statsElement.getElementsByClassName('stats__turns');
+        const [elapsedTime] = this.statsElement.getElementsByClassName('stats__elapsed-time');
+        turns.textContent = this.turns;
+        elapsedTime.textContent = this.getParsedTime();
+
+        this.isUpdateRender = false;
+      }
+
+      console.log(this);
     });
   }
 
@@ -393,9 +418,8 @@ class GemPuzzle {
   }
 
   resize() {
-    // TODO: на ресайзе почему-то отключаются (НОДЫ УДАЛЯЮТСЯ СОБЫТИЯ СЛЕТАЮТ)
-    // this.rootElement.remove();
-    // this.initStructure();
+    this.rootElement.remove();
+    this.initPuzzle();
     [...this.gameFieldElement.firstElementChild.children]
       .forEach((val) => {
         const el = val;
@@ -490,4 +514,4 @@ gemPuzzle.initPuzzle();
 // gemPuzzle.resize();
 console.log(gemPuzzle);
 
-gemPuzzle.shuffle();
+// gemPuzzle.shuffle();

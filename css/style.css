@@ -146,4 +146,12 @@ body {
 .field-size-anchors__item {
   display: inline;
   margin-right: 5px;
+  color: magenta;
+  background-color: white;
+  cursor: pointer;
+}
+
+.field-size-anchors__item:hover {
+  background-color: #e6e6e6;
+  user-select: none;
 }
