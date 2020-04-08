@@ -449,7 +449,6 @@ class GemPuzzle {
   }
 
   shuffle() {
-    // TODO: рандомный алгоритм шафлинга
     const array = [];
 
     for (let i = 0; i < this.gameFieldSize ** 2 - 1; i += 1) {
@@ -473,7 +472,8 @@ class GemPuzzle {
 
     // showSwag.call(this, array);
 
-    const N = 25; // EASY = 25, MEDIUM = 25 * 4, HARD = 25 * 4 * 5
+    // const N = 25; // EASY = 25, MEDIUM = 25 * 4, HARD = 25 * 4 * 5
+    const N = Math.floor((25 * this.gameFieldSize ** 2) / 9);
 
     let counterN = N; //Math.floor(Math.random() * N + 1);
     // console.log('Random N: ', counterN); // 1, 2, 3
